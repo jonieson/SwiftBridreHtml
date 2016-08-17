@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<head>
+	<title>iOS and Js</title>
+	<style type="text/css">
+	  * {
+	  	font-size: 40px;
+	  }
+	</style>
+</head>
+
+<body>
+  
+<div style="margin-top: 100px">
+	<h1>Test how to use objective-c call js</h1><br/>
+	<div><input type="button" value="调用JS" onclick="callJsAlert()"></div>
+    <br/>
+	<div><input type="button" value="JS" onclick="callJsConfirm()"></div><br/>
+</div>
+<br/>
+<div>
+	<div><input type="button" value="Call Js prompt " onclick="callJsInput()"></div><br/>
+  <div><input type="button" value="Swift inject js" onclick="showAlert()"></div><br/>
+  <div>Click me here: <a href="http://www.baidu.com">Jump to Baidu</a></div>
+</div>
+
+<br/>
+<div id="SwiftDiv">
+	<span id="jsParamFuncSpan" style="color: red; font-size: 50px;"></span>
+</div>
+<!--<script type="text/javascript">-->
+<!--    (function(){-->
+<!--     window.webkit.messageHandlers.AppModel.postMessage({body: 'hello world'});-->
+<!--     }());-->
+<!--    </script>-->
+<script type="text/javascript">
+   function callJsAlert() {
+    //这里是JS调用客户端注册的AppModel标志符
+    window.webkit.messageHandlers.AppModel.postMessage({body: '客户端调用JS成功'});
+   }
+
+function callJsConfirm() {
+    //下面这是JS内部方法
+  if (confirm('confirm', 'Objective-C call js to show confirm')) {
+    document.getElementById('jsParamFuncSpan').innerHTML
+    = 'true';
+  } else {
+    document.getElementById('jsParamFuncSpan').innerHTML
+    = 'false';
+  }
+  //这是相应前端LocationModel注册handler
+  window.webkit.messageHandlers.LocationModel.postMessage({data: 'location'});
+}
+
+function callJsInput() {
+  var response = prompt('Hello', 'Please input your name:');
+  document.getElementById('jsParamFuncSpan').innerHTML = response;
+  
+<!--  window.webkit.messageHandlers.AppModel.postMessage({body: response});-->
+}
+function getIndexArea(aa){
+    window.webkit.messageHandlers.AppModel.postMessage({body:aa});
+}
+function getLocation(area){
+    alert(area);
+    window.webkit.messageHandlers.LoadingModel.postMessage({body: 'oc调用js方法'});
+}
+// 注意哦，如果JS写错，可能在OC调用JS方法时，都会出错哦。
+var jsParamFunc = function(argument) {
+  document.getElementById('jsParamFuncSpan').innerHTML
+  = argument['name'];
+}
+showAler();
+funcs();
+</script>
+</body>
+</html>
